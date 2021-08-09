@@ -1,0 +1,19 @@
+version: "2.2"
+services:
+  nginx:
+    ports:
+      - "8080:3128"
+    image: "localhost:5000/nginxmyreg:0.1"
+    volumes:
+      - "/var/tmp/docker/static:/usr/share/nginx/html"
+    mem_limit: "128M"
+    cpus: 0.01
+
+  apache:
+    image: "localhost:5000/httpdmyreg:0.1"
+    ports:
+      - "8081:80"
+    volumes:
+      - "/var/tmp/docker/static/:/usr/local/apache2/htdocs"
+    mem_limit: "256M"
+    cpus: 0.1
