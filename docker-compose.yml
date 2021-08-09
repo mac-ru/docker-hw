@@ -8,7 +8,10 @@ services:
       - "/var/tmp/docker/static:/usr/share/nginx/html"
     mem_limit: "128M"
     cpus: 0.01
-
+    networks:
+      nginxnet:
+        ipv4_address: 172.16.14.2
+        ipv6_address: fc00:1::2
   apache:
     image: "localhost:5000/httpdmyreg:0.1"
     ports:
@@ -17,3 +20,33 @@ services:
       - "/var/tmp/docker/static/:/usr/local/apache2/htdocs"
     mem_limit: "256M"
     cpus: 0.1
+    networks:
+      apachenet:
+        ipv4_address: 172.16.15.2
+        ipv6_address: "fc00:2::2"
+
+
+networks:
+    nginxnet:
+      driver: bridge
+      driver_opts:
+        enable_ipv6: "true"
+      ipam:
+        driver: default
+        config:
+          - subnet: 172.16.14.0/24
+            gateway: 172.16.14.1
+          - subnet: "fc00:1::/64"
+            gateway: "fc00:1::1"
+    apachenet:
+      driver: bridge
+      driver_opts:
+        enable_ipv6: "true"
+      ipam:
+        driver: default
+        config:
+          - subnet: 172.16.15.0/24
+            gateway: 172.16.15.1
+          - subnet: "fc00:2::/64"
+            gateway: "fc00:2::1"
+
